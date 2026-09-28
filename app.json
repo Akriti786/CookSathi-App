@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "cooksathii",
-    "slug": "cooksathii",
+    "name": "CookSathi",
+    "slug": "cooksathi",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/logo.jpg",
     "userInterfaceStyle": "light",
     "ios": {
       "supportsTablet": true
@@ -14,11 +14,11 @@
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
-        "monochromeImage": "./assets/android-icon-monochrome.png"
+        "monochromeImage": "./assets/logo.jpg"
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/logo.jpg"
     }
   }
 }
