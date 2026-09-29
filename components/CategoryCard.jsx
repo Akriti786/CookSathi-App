@@ -1,9 +1,21 @@
-import { View, Text, StyleSheet } from "react-native";
+import {
+  Text,
+  StyleSheet,
+  Pressable,
+} from "react-native";
+
 import colors from "../constants/colors";
 
-export default function CategoryCard({ name, emoji }) {
+export default function CategoryCard({
+  name,
+  emoji,
+  onPress,
+}) {
   return (
-    <View style={styles.category}>
+    <Pressable
+      style={styles.category}
+      onPress={onPress}
+    >
       <Text style={styles.categoryEmoji}>
         {emoji}
       </Text>
@@ -11,7 +23,7 @@ export default function CategoryCard({ name, emoji }) {
       <Text style={styles.categoryName}>
         {name}
       </Text>
-    </View>
+    </Pressable>
   );
 }
 

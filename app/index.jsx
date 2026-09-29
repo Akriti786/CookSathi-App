@@ -7,6 +7,7 @@ import colors from "../constants/colors";
 import SearchBar from "../components/SearchBar";
 import RecipeCard from "../components/RecipeCard";
 import CategoryCard from "../components/CategoryCard";
+import recipes from "../data/recipes";
 
 const categories = [
   {
@@ -31,33 +32,6 @@ const categories = [
   },
 ];
 
-
-const recipes = [
-  {
-    id: "101",
-    name: "Chicken Biryani",
-    rating: "4.8",
-    time: "45",
-    description: "Delicious and flavorful Indian rice dish.",
-    emoji: "🍛",
-  },
-  {
-    id: "102",
-    name: "Matar Paneer",
-    rating: "4.7",
-    time: "30",
-    description: "Creamy paneer cooked with green peas.",
-    emoji: "🥘",
-  },
-  {
-    id: "103",
-    name: "Masala Dosa",
-    rating: "4.6",
-    time: "25",
-    description: "Crispy dosa served with delicious potato masala.",
-    emoji: "🥞",
-  },
-];
 
 export default function HomeScreen() {
 
@@ -106,6 +80,8 @@ export default function HomeScreen() {
             key={category.id}
             name={category.name}
             emoji={category.emoji}
+              onPress={() => router.push(
+                `/category/${category.name.toLowerCase()}`) }
           />
 
         ))}
