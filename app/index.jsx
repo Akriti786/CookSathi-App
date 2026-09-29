@@ -1,10 +1,77 @@
-import { View, Text, StyleSheet, TextInput, ScrollView } from "react-native";
+import { useState } from "react";
+import { useRouter } from "expo-router";
+
+import { View, Text, StyleSheet, ScrollView } from "react-native";
+
 import colors from "../constants/colors";
+import SearchBar from "../components/SearchBar";
+import RecipeCard from "../components/RecipeCard";
+import CategoryCard from "../components/CategoryCard";
+
+const categories = [
+  {
+    id: "1",
+    name: "Indian",
+    emoji: "🍛",
+  },
+  {
+    id: "2",
+    name: "Healthy",
+    emoji: "🥗",
+  },
+  {
+    id: "3",
+    name: "Desserts",
+    emoji: "🍰",
+  },
+  {
+    id: "4",
+    name: "Chinese",
+    emoji: "🍜",
+  },
+];
+
+
+const recipes = [
+  {
+    id: "101",
+    name: "Chicken Biryani",
+    rating: "4.8",
+    time: "45",
+    description: "Delicious and flavorful Indian rice dish.",
+    emoji: "🍛",
+  },
+  {
+    id: "102",
+    name: "Matar Paneer",
+    rating: "4.7",
+    time: "30",
+    description: "Creamy paneer cooked with green peas.",
+    emoji: "🥘",
+  },
+  {
+    id: "103",
+    name: "Masala Dosa",
+    rating: "4.6",
+    time: "25",
+    description: "Crispy dosa served with delicious potato masala.",
+    emoji: "🥞",
+  },
+];
 
 export default function HomeScreen() {
+
+  const [searchText, setSearchText] = useState("");
+
+  const router = useRouter();
+
+  const filteredRecipes = recipes.filter((recipe) =>
+    recipe.name.toLowerCase().includes(searchText.toLowerCase())
+  );
+
   return (
     <ScrollView style={styles.container}>
-      
+
       <View style={styles.header}>
         <View>
           <Text style={styles.title}>🍳 CookSathi</Text>
@@ -20,10 +87,10 @@ export default function HomeScreen() {
         What do you want to cook?
       </Text>
 
-      <TextInput
-        style={styles.search}
-        placeholder="🔍 Search recipes..."
-        placeholderTextColor={colors.gray}
+      <SearchBar
+        value={searchText}
+        onChangeText={setSearchText}
+
       />
 
       <Text style={styles.sectionTitle}>Categories</Text>
@@ -32,64 +99,46 @@ export default function HomeScreen() {
         horizontal
         showsHorizontalScrollIndicator={false}
       >
-        <View style={styles.category}>
-          <Text style={styles.categoryEmoji}>🍛</Text>
-          <Text>Indian</Text>
-        </View>
 
-        <View style={styles.category}>
-          <Text style={styles.categoryEmoji}>🥗</Text>
-          <Text>Healthy</Text>
-        </View>
+        {categories.map((category) => (
 
-        <View style={styles.category}>
-          <Text style={styles.categoryEmoji}>🍰</Text>
-          <Text>Desserts</Text>
-        </View>
+          <CategoryCard
+            key={category.id}
+            name={category.name}
+            emoji={category.emoji}
+          />
 
-        <View style={styles.category}>
-          <Text style={styles.categoryEmoji}>🍜</Text>
-          <Text>Chinese</Text>
-        </View>
+        ))}
+
       </ScrollView>
 
       <Text style={styles.sectionTitle}>Popular Recipes</Text>
 
-      <View style={styles.recipeCard}>
-        <Text style={styles.recipeImage}>🍛</Text>
+      {filteredRecipes.length === 0 ? (
+        <View style={styles.emptyContainer}>
+          <Text style={styles.emptyEmoji}>🔍</Text>
 
-        <View style={styles.recipeInfo}>
-          <Text style={styles.recipeName}>
-            Chicken Biryani
+          <Text style={styles.emptyTitle}>
+            No recipes found
           </Text>
 
-          <Text style={styles.recipeDetails}>
-            ⭐ 4.8   •   ⏱ 45 min
-          </Text>
-
-          <Text style={styles.recipeDescription}>
-            Delicious and flavorful Indian rice dish.
+          <Text style={styles.emptyText}>
+            Try searching for another dish.
           </Text>
         </View>
-      </View>
-
-      <View style={styles.recipeCard}>
-        <Text style={styles.recipeImage}>🥘</Text>
-
-        <View style={styles.recipeInfo}>
-          <Text style={styles.recipeName}>
-            Matar Paneer
-          </Text>
-
-          <Text style={styles.recipeDetails}>
-            ⭐ 4.7   •   ⏱ 30 min
-          </Text>
-
-          <Text style={styles.recipeDescription}>
-            Creamy paneer cooked with green peas.
-          </Text>
-        </View>
-      </View>
+      ) : (
+        filteredRecipes.map((recipe) => (
+          <RecipeCard
+            key={recipe.id}
+            name={recipe.name}
+            rating={recipe.rating}
+            time={recipe.time}
+            description={recipe.description}
+            emoji={recipe.emoji}
+            onPress={() => router.push(`/recipes/${recipe.id}`)}
+          />
+        ))
+      )}
 
     </ScrollView>
   );
@@ -133,15 +182,6 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
 
-  search: {
-    backgroundColor: colors.white,
-    borderRadius: 12,
-    padding: 15,
-    fontSize: 16,
-    borderWidth: 1,
-    borderColor: colors.lightGray,
-  },
-
   sectionTitle: {
     fontSize: 20,
     fontWeight: "bold",
@@ -150,55 +190,26 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
 
-  category: {
-    width: 100,
-    height: 100,
-    backgroundColor: colors.white,
-    borderRadius: 15,
-    justifyContent: "center",
+  emptyContainer: {
     alignItems: "center",
-    marginRight: 12,
+    marginTop: 40,
   },
 
-  categoryEmoji: {
-    fontSize: 32,
-    marginBottom: 5,
+  emptyEmoji: {
+    fontSize: 45,
+    marginBottom: 10,
   },
 
-  recipeCard: {
-    backgroundColor: colors.white,
-    borderRadius: 15,
-    padding: 15,
-    marginBottom: 15,
-    flexDirection: "row",
-  },
-
-  recipeImage: {
-    fontSize: 55,
-    width: 80,
-    textAlign: "center",
-  },
-
-  recipeInfo: {
-    flex: 1,
-    marginLeft: 10,
-  },
-
-  recipeName: {
-    fontSize: 18,
+  emptyTitle: {
+    fontSize: 20,
     fontWeight: "bold",
     color: colors.black,
   },
 
-  recipeDetails: {
+  emptyText: {
     fontSize: 14,
-    color: colors.primary,
-    marginTop: 6,
-  },
-
-  recipeDescription: {
-    fontSize: 13,
     color: colors.gray,
     marginTop: 8,
   },
+
 });
